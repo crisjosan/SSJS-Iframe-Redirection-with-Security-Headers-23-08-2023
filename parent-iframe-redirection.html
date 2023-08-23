@@ -2,7 +2,7 @@
 <html>
 
 <head>
-    <!-- Security Headers -->
+    <!-- Security headers -->
     <meta http-equiv="Content-Security-Policy"
         content="default-src 'self'; frame-src 'self'; script-src 'self' 'unsafe-inline';">
     <meta http-equiv="X-Frame-Options" content="SAMEORIGIN">
@@ -12,9 +12,11 @@
 
 <body>
 
-    <h1>Parent Page that contains iframe</h1>
-    <iframe src="https://cloud.pmiclicks.com/child-home-page-1" width="500" height="500"
-        sandbox=" allow-same-origin allow-forms allow-scripts"></iframe>
+    <h1>Iframe Parent Page </h1>
+    <p> It is implemented with security best practices and performs iframe redirects using SSJS. </p>
+
+    <iframe src="https://cloud.pmiclicks.com/child-home-page-1" width="600" height="300"
+        sandbox="allow-forms allow-same-origin allow-scripts"></iframe>
 
 </body>
 
