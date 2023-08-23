@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Security headers -->
+    <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; frame-src 'self'; script-src 'self' 'unsafe-inline';">
+    <meta http-equiv="X-XSS-Protection" content="1; mode=block">
+    <meta http-equiv="X-Content-Type-Options" content="nosniff">
+
+    <title>Registration Form</title>
+    %%[
+    SET @origin = HTTPRequestHeader("Referer")
+    SET @pattern = "^(https:\/\/(.*\.)?((cloud.pmiclicks)\.com))($|\/)"
+    SET @match = RegExMatch(@origin, @pattern, 1)
+    ]%%
+    <script runat=server>
+        Platform.Load("core", "1");
+        var MATCH = Variable.GetValue("@match");
+        if (!MATCH) { MATCH = null }
+        HTTPHeader.SetValue("Access-Control-Allow-Methods", "POST");
+        HTTPHeader.SetValue("Access-Control-Allow-Origin", MATCH);
+        Platform.Response.SetResponseHeader("Strict-Transport-Security", "max-age=200");
+        Platform.Response.SetResponseHeader("X-XSS-Protection", "1; mode=block");
+        Platform.Response.SetResponseHeader("X-Frame-Options", "SAMEORIGIN");
+        Platform.Response.SetResponseHeader("X-Content-Type-Options", "nosniff");
+        Platform.Response.SetResponseHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+        Platform.Response.SetResponseHeader("Content-Security-Policy", "default-src 'self'; frame-src 'self'; script-src 'self' 'unsafe-inline'"); 
+    </script>
+    %%[
+    IF LENGTH(@match) > 0 THEN
+    ]%%
+</head>
+
+<body>
+
+    <div class="row ">
+
+        <h3><strong>Thank You!</strong></h3>
+        <p>
+            Your data has been saved.
+        </p><br>
+    </div>
+
+</body>
+%%[ENDIF
+]%%
+
+</html>
