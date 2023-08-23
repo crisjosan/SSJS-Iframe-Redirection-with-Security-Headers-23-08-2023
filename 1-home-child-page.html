@@ -4,16 +4,16 @@
 </script>
 %%[
 
-  /* Retrieve form field values from radio button */
-  SET @gender = RequestParameter('gender')
+/* Retrieve form field values from radio button */
+SET @gender = RequestParameter('gender')
 
-  IF RequestParameter('submitted') == 'true' THEN
-    /* Redirect to the second page with the unique ID appended to the URL */
-    SET @redirectUrl = Concat("https://cloud.pmiclicks.com/child-form-page-2?","answer=",@gender)
-    Redirect(@redirectUrl)
-    
+IF RequestParameter('submitted') == 'true' THEN
+/* Redirect to the second page with the unique ID appended to the URL */
+SET @redirectUrl = Concat("https://cloud.pmiclicks.com/child-form-page-2?","answer=",@gender)
+Redirect(@redirectUrl)
 
-  ENDIF
+
+ENDIF
 
 ]%%
 <script runat="server">
@@ -32,23 +32,23 @@
     <!-- Security headers -->
 
     <title>Registration Form</title>
-  %%[
+    %%[
     SET @origin = HTTPRequestHeader("Referer")
     SET @pattern = "^(https:\/\/(.*\.)?((cloud.pmiclicks)\.com))($|\/)"
     SET @match = RegExMatch(@origin, @pattern, 1)
     ]%%
     <script runat=server>
-        Platform.Load("core","1");
+        Platform.Load("core", "1");
         var MATCH = Variable.GetValue("@match");
         if (!MATCH) { MATCH = null }
-        HTTPHeader.SetValue("Access-Control-Allow-Methods","POST");
-        HTTPHeader.SetValue("Access-Control-Allow-Origin",MATCH);
-        Platform.Response.SetResponseHeader("Strict-Transport-Security","max-age=200"); 
-        Platform.Response.SetResponseHeader("X-XSS-Protection","1; mode=block"); 
-        Platform.Response.SetResponseHeader("X-Frame-Options","SAMEORIGIN"); 
-        Platform.Response.SetResponseHeader("X-Content-Type-Options","nosniff"); 
-        Platform.Response.SetResponseHeader("Referrer-Policy","strict-origin-when-cross-origin"); 
-        Platform.Response.SetResponseHeader("Content-Security-Policy","default-src 'self'; frame-src 'self'; script-src 'self' 'unsafe-inline'"); 
+        HTTPHeader.SetValue("Access-Control-Allow-Methods", "POST");
+        HTTPHeader.SetValue("Access-Control-Allow-Origin", MATCH);
+        Platform.Response.SetResponseHeader("Strict-Transport-Security", "max-age=200");
+        Platform.Response.SetResponseHeader("X-XSS-Protection", "1; mode=block");
+        Platform.Response.SetResponseHeader("X-Frame-Options", "SAMEORIGIN");
+        Platform.Response.SetResponseHeader("X-Content-Type-Options", "nosniff");
+        Platform.Response.SetResponseHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+        Platform.Response.SetResponseHeader("Content-Security-Policy", "default-src 'self'; frame-src 'self'; script-src 'self' 'unsafe-inline'"); 
     </script>
     %%[
     IF LENGTH(@match) > 0 THEN
@@ -57,45 +57,40 @@
 
 <body>
 
-  
+
     <form action="%%=RequestParameter('PAGEURL')=%%" method="post">
-        <div class="row setup-content" id="">
-            <div class="col-xs-6 col-md-offset-3">
-                <div class="col-md-12">
-                    <h3><strong>Gender Informatiom v1</strong></h3>
-                    <p>
-                        Please select your gender.
-                    </p><br>
-                    <label class="control-label">Gender</label>
-                    <div class="form-group">
-                        <div class="col-sm-3">
-                            <label class="radio-inline">
-                                <input name="gender" id="input-gender-male" value="Male" type="radio" />Male
-                            </label>
-                        </div>
-                        <div class="col-sm-3">
-                            <label class="radio-inline">
-                                <input name="gender" id="input-gender-female" value="Female" type="radio" />Female
-                            </label>
-                        </div><br>
-                    </div>
+        <div class="row">
+            <div class="col">
 
-
-                    <div class="">
-                        <input type="hidden" name="submitted" value="true">
-                        <button type="submit" class="btn btn-submit"
-                            >
-                            Submit
-                        </button>
-                    </div>
+                <h3><strong>Gender Informatiom</strong></h3>
+                <p style="font-style: italic;">
+                    Please select your gender.
+                </p><br>
+                <label class="control-label" style="font-weight: bold;">Gender</label>
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        <br> <label class="radio-inline">
+                            <input name="gender" id="input-gender-male" value="Male" type="radio" />Male
+                        </label>
+                    </div> <br />
+                    <div class="col-sm-3">
+                        <label class="radio-inline">
+                            <input name="gender" id="input-gender-female" value="Female" type="radio" />Female
+                        </label>
+                    </div><br>
                 </div>
+                <div class="btn">
+                    <input type="hidden" name="submitted" value="true">
+                    <button type="submit" class="btn btn-submit"> Submit </button>
+                </div>
+
             </div>
         </div>
     </form>
-  %%[ENDIF 
- ]%%
-    
-    
+    %%[ENDIF
+    ]%%
+
+
 </body>
 
 </html>
