@@ -1,12 +1,35 @@
+<script runat="server" language="ampscript">
+    Platform.Load("Core", "1.1.1");
+    try {
+</script>
+%%[
+
+/* Retrieve form field values from radio button */
+SET @gender = RequestParameter('gender')
+
+IF RequestParameter('submitted') == 'true' THEN
+/* Redirect to the second page with the unique ID appended to the URL */
+SET @redirectUrl = Concat("https://cloud.pmiclicks.com/child-form-page-2?","answer=",@gender)
+Redirect(@redirectUrl)
+
+
+ENDIF
+
+]%%
+<script runat="server">
+    } catch (e) {
+        Write("<hr><b>Error Message:</b> " + Stringify(e.message) + "<br><br><b>Description:</b> " + Stringify(e.description) + "<hr>");
+    }
+</script>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
     <!-- Security headers -->
-
 
     <title>Registration Form</title>
     %%[
@@ -28,74 +51,46 @@
         Platform.Response.SetResponseHeader("Content-Security-Policy", "default-src 'self'; frame-src 'self'; script-src 'self' 'unsafe-inline'"); 
     </script>
     %%[
-    IF LENGTH(@match) > 0 THEN ]%%
+    IF LENGTH(@match) > 0 THEN
+    ]%%
 </head>
 
 <body>
 
 
-    <script runat="server">
-        Platform.Load("core", "1");
-
-        var submitted = Platform.Request.GetQueryStringParameter("submitted");
-
-        if (submitted === "true") {
-            var email = Platform.Request.GetQueryStringParameter("email");
-            var firstname = Platform.Request.GetQueryStringParameter("firstname");
-            var lastname = Platform.Request.GetQueryStringParameter("lastname");
-
-            // Insert data into Data Extension
-            var deKey = "Debug_Iframe_DE";
-            var de = DataExtension.Init(deKey);
-
-            var fields = {
-                Email: email,
-                FirstName: firstname,
-                LastName: lastname
-            };
-
-            var status = de.Rows.Add(fields);
-
-            // Redirect to the second page
-            var redirectUrl = "https://cloud.pmiclicks.com/child-thanks-page-3";
-            Platform.Response.Redirect(redirectUrl);
-        }
-    </script>
-
     <form action="%%=RequestParameter('PAGEURL')=%%" method="post">
         <div class="row">
             <div class="col">
-                <h3><strong>Personal Information</strong></h3>
-                <p>
-                    Please enter your personal details.
-                </p><br>
-                <div class="form-group">
-                    <label class="control-label">Email</label>
-                    <input type="email" required="required" class="form-control" placeholder="Email" id="email"
-                        name="email">
-                </div><br>
 
+                <h3><strong>Gender Informatiom</strong></h3>
+                <p style="font-style: italic;">
+                    Please select your gender.
+                </p><br>
+                <label class="control-label" style="font-weight: bold;">Gender</label>
                 <div class="form-group">
-                    <label class="control-label">First Name</label>
-                    <input type="text" required="required" class="form-control" placeholder="First Name" id="firstname"
-                        name="firstname">
-                </div><br>
-                <div class="form-group">
-                    <label class="control-label">Last Name</label>
-                    <input type="text" required="required" class="form-control" placeholder="Last Name" id="lastname"
-                        name="lastname">
-                </div><br>
-                <div class="">
-                    <input type="hidden" name="submitted" value="true">
-                    <button type="submit" class="btn btn-submit">
-                        Submit
-                    </button>
+                    <div class="col-sm-3">
+                        <br> <label class="radio-inline">
+                            <input name="gender" id="input-gender-male" value="Male" type="radio" />Male
+                        </label>
+                    </div> <br />
+                    <div class="col-sm-3">
+                        <label class="radio-inline">
+                            <input name="gender" id="input-gender-female" value="Female" type="radio" />Female
+                        </label>
+                    </div><br>
                 </div>
+                <div class="btn">
+                    <input type="hidden" name="submitted" value="true">
+                    <button type="submit" class="btn btn-submit"> Submit </button>
+                </div>
+
             </div>
         </div>
     </form>
     %%[ENDIF
     ]%%
+
+
 </body>
 
 </html>
